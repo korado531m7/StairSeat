@@ -68,9 +68,7 @@ class StairSeat extends PluginBase implements Listener{
     //NOTE: I want to call such a related packet or event but it doesn't work so i use playermoveevent instead.
     public function onJump(PlayerMoveEvent $event){
         $player = $event->getPlayer();
-        $to = round($event->getTo()->getY(), 1);
-        $from = round($event->getFrom()->getY(), 1);
-        if($this->isSitting($player) && (microtime(true) - $this->getSitData($player, 1)) > 0.145 && $from !== $to){
+        if($this->isSitting($player) && (microtime(true) - $this->getSitData($player, 1)) > 0.145 && round($event->getFrom()->getY(), 1) !== round($event->getTo()->getY(), 1)){
             $this->unsetSitting($player);
         }
     }
