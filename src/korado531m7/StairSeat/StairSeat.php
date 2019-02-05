@@ -9,10 +9,11 @@ use pocketmine\event\Listener;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
+use pocketmine\network\mcpe\protocol\InteractPacket;
 use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
 use pocketmine\network\mcpe\protocol\SetEntityLinkPacket;
 use pocketmine\network\mcpe\protocol\types\EntityLink;
@@ -65,10 +66,10 @@ class StairSeat extends PluginBase implements Listener{
         }
     }
     
-    //NOTE: I want to call such a related packet or event but it doesn't work so i use playermoveevent instead.
-    public function onJump(PlayerMoveEvent $event){
+    public function onLeave(DataPacketReceiveEvent $event){
+        $packet = $event->getPacket();
         $player = $event->getPlayer();
-        if($this->isSitting($player) && $player->floor()->equals($this->getSitData($player, 1)) && round($event->getFrom()->getY(), 1) !== round($event->getTo()->getY(), 1)){
+        if($packet instanceof InteractPacket && $this->isSitting($player) && $packet->action === InteractPacket::ACTION_LEAVE_VEHICLE){
             $this->unsetSitting($player);
         }
     }
