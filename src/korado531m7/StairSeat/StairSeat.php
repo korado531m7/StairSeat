@@ -5,80 +5,59 @@ use pocketmine\Player;
 use pocketmine\block\Block;
 use pocketmine\block\Stair;
 use pocketmine\entity\Entity;
-use pocketmine\event\Listener;
-use pocketmine\event\block\BlockBreakEvent;
-use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\player\PlayerQuitEvent;
-use pocketmine\event\server\DataPacketReceiveEvent;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
-use pocketmine\network\mcpe\protocol\InteractPacket;
 use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
 use pocketmine\network\mcpe\protocol\SetEntityLinkPacket;
 use pocketmine\network\mcpe\protocol\types\EntityLink;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
-class StairSeat extends PluginBase implements Listener{
-    private $sit = [];
+class StairSeat extends PluginBase{
+    public $sit = [];
     
     public function onEnable(){
-        $this->getServer()->getPluginManager()->registerEvents($this, $this);
+        $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         @mkdir($this->getDataFolder(), 0744, true);
         $this->saveResource('config.yml', false);
         $this->config = new Config($this->getDataFolder().'config.yml', Config::YAML);
     }
     
-    public function onQuit(PlayerQuitEvent $event){
-        $player = $event->getPlayer();
-        if($this->isSitting($player)){
-            $this->unsetSitting($player);
-        }
+    public function isStairBlock(Block $block) : bool{
+        return $block instanceof Stair && $block->getDamage() <= 3;
     }
     
-    public function onInteract(PlayerInteractEvent $event){
-        $player = $event->getPlayer();
-        if(!$this->isSitting($player)){
-            $block = $event->getBlock();
-            if($this->isStairBlock($block)){
-                if($usePlayer = $this->isUsingSeat($block->floor())){
-                    $player->sendMessage(str_replace(['@p','@b'],[$usePlayer->getName(), $block->getName()],$this->config->get('tryto-sit-already-inuse')));
-                }else{
-                    $eid = Entity::$entityCount++;
-                    $this->setSitting($player, $block->asVector3(), $eid);
-                    $player->sendTip(str_replace('@b',$block->getName(),$this->config->get('send-tip-when-sit')));
-                }
+    public function isAllowedUnderBlock(Block $block) : bool{
+        $bk = $this->config->get('allow-block-under-id');
+        $isBool = is_bool($bk);
+        return $isBool && $bk ? true : ($isBool ? false : $block->getLevel()->getBlock($block->down())->getId() === $bk);
+    }
+    
+    public function canUseWorld(Level $level) : bool{
+        $world = $this->config->get('apply-world');
+        if(is_bool($world) && $world){
+            return true;
+        }else{
+            foreach(explode(',', $world) as $w){
+                if(strtolower($level->getName()) === strtolower(trim($w))) return true;
             }
         }
+        return false;
     }
     
-    public function onJoin(PlayerJoinEvent $event){
-        $player = $event->getPlayer();
-        //Can't apply without delaying that's why using delayed task
-        if(count($this->sit) >= 1) $this->getScheduler()->scheduleDelayedTask(new SendTask($player, $this->sit, $this), 30);
+    public function isAllowedHighHeight(Player $player, Vector3 $pos) : bool{
+        return $this->config->get('allow-seat-high-height') ? true : $player->y - $pos->y >= 0;
     }
     
-    public function onBreak(BlockBreakEvent $event){
-        $block = $event->getBlock();
-        if($this->isStairBlock($block) && ($usingPlayer = $this->isUsingSeat($block->floor()))){
-            $this->unsetSitting($usingPlayer);
-        }
+    public function canSit(Player $player, Block $block) : bool{
+        return $this->isStairBlock($block) && 
+                $this->canUseWorld($player->getLevel()) && 
+                $this->isAllowedHighHeight($player, $block->asVector3()) && 
+                $this->isAllowedUnderBlock($block);
     }
     
-    public function onLeave(DataPacketReceiveEvent $event){
-        $packet = $event->getPacket();
-        $player = $event->getPlayer();
-        if($packet instanceof InteractPacket && $this->isSitting($player) && $packet->action === InteractPacket::ACTION_LEAVE_VEHICLE){
-            $this->unsetSitting($player);
-        }
-    }
-    
-    private function isStairBlock(Block $block) : bool{
-        return $block instanceof Stair;
-    }
-    
-    private function isUsingSeat(Vector3 $pos) : ?Player{
+    public function isUsingSeat(Vector3 $pos) : ?Player{
         foreach($this->sit as $name => $data){
             if($pos->equals($data[1])){
                 $player = $this->getServer()->getPlayer($name);
@@ -88,19 +67,19 @@ class StairSeat extends PluginBase implements Listener{
         return null;
     }
     
-    private function getSitData(Player $player, int $type = 0){
+    public function getSitData(Player $player, int $type = 0){
         return $this->sit[$player->getName()][$type];
     }
     
-    private function setSitPlayerId(Player $player, int $id, Vector3 $pos) : void{
+    public function setSitPlayerId(Player $player, int $id, Vector3 $pos) : void{
         $this->sit[$player->getName()] = [$id, $pos];
     }
     
-    private function isSitting(Player $player) : bool{
+    public function isSitting(Player $player) : bool{
         return array_key_exists($player->getName(), $this->sit);
     }
     
-    private function unsetSitting(Player $player){
+    public function unsetSitting(Player $player){
         $id = $this->getSitData($player);
         $pk = new SetEntityLinkPacket();
         $entLink = new EntityLink();

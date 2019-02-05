@@ -1,6 +1,34 @@
 # StairSeat Configuration File
 
+# ------------------------------ Apply Settings ------------------------------
+
+# Enter world name for applying
+# if you want multiple worlds, separate with comma   (e.g. test1, test2)
+# (if set to true, all of worlds will be applied seat feature)
+
+apply-world: true
+
 # ----------------------------------------------------------------------------
+
+# Allow player to sit on seat if its height is higher than player
+
+allow-seat-high-height: false
+
+# ----------------------------------------------------------------------------
+
+# Player can sit on stair if under the block's id is this id.
+# (if set to true, all of blocks are allowed)
+# (Example: if set to 5 (oak wood block), player can sit on stair if under the stair's block is oak wood)
+
+allow-block-under-id: true
+
+# ----------------------------------------------------------------------------
+
+
+
+
+
+# ---------------------------- General Settings -------------------------------
 
 # Send tip when sit down
 # Replacement : @b = block where player try to seat name

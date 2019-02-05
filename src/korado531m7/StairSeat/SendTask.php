@@ -14,7 +14,7 @@ class SendTask extends Task{
     public function onRun(int $tick) : void{
         foreach($this->data as $name => $datum){
             if(($player = $this->instance->getServer()->getPlayer($name)) === null || $this->who === null) continue;
-            $this->instance->setSitting($player, $datum[2], $datum[0], $this->who);
+            $this->instance->setSitting($player, $datum[1], $datum[0], $this->who);
         }
     }
 }
