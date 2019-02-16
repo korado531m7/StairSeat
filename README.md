@@ -1,3 +1,6 @@
+[![](https://poggit.pmmp.io/shield.dl.total/StairSeat)](https://poggit.pmmp.io/p/StairSeat)
+[![](https://poggit.pmmp.io/shield.state/StairSeat)](https://poggit.pmmp.io/p/StairSeat)
+
 # StairSeat
 **Sit on the stair block**
 **Supported all stair blocks**
