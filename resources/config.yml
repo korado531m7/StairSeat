@@ -24,6 +24,14 @@ allow-block-under-id: true
 
 # ----------------------------------------------------------------------------
 
+# Disable block id
+# To disable some blocks, separate with comma
+# (ex. to disable oak stair and stone stair, write '53, 109')
+
+disable-block-ids: false
+
+# ----------------------------------------------------------------------------
+
 
 
 

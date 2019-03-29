@@ -34,3 +34,8 @@ Replacement:
 `@p` - Sitting player's name
 
 Example: You are trying to seat @b but it is used by @p
+
+
+`disable-block-ids`        - Disable stair blocks
+
+Example: to disable oak stair and stone stair, write '53, 109'

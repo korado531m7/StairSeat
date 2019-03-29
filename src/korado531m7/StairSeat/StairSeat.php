@@ -34,9 +34,21 @@ class StairSeat extends PluginBase{
         return $isBool && $bk ? true : ($isBool ? false : $block->getLevel()->getBlock($block->down())->getId() === $bk);
     }
     
+    public function isAllowedStair(Block $block) : bool{
+        $id = $this->config->get('disable-block-ids');
+        if($id === false){
+            return true;
+        }else{
+            foreach(explode(',', $id) as $i){
+                if($block->getId() == trim($i)) return false;
+            }
+        }
+        return true;
+    }
+    
     public function canUseWorld(Level $level) : bool{
         $world = $this->config->get('apply-world');
-        if(is_bool($world) && $world){
+        if($world === true){
             return true;
         }else{
             foreach(explode(',', $world) as $w){
@@ -54,7 +66,8 @@ class StairSeat extends PluginBase{
         return $this->isStairBlock($block) && 
                 $this->canUseWorld($player->getLevel()) && 
                 $this->isAllowedHighHeight($player, $block->asVector3()) && 
-                $this->isAllowedUnderBlock($block);
+                $this->isAllowedUnderBlock($block) &&
+                $this->isAllowedStair($block);
     }
     
     public function isUsingSeat(Vector3 $pos) : ?Player{
