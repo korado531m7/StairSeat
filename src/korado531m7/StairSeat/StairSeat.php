@@ -7,9 +7,9 @@ use pocketmine\block\Stair;
 use pocketmine\entity\Entity;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\AddEntityPacket;
-use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
-use pocketmine\network\mcpe\protocol\SetEntityLinkPacket;
+use pocketmine\network\mcpe\protocol\AddActorPacket;
+use pocketmine\network\mcpe\protocol\RemoveActorPacket;
+use pocketmine\network\mcpe\protocol\SetActorLinkPacket;
 use pocketmine\network\mcpe\protocol\types\EntityLink;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -94,7 +94,7 @@ class StairSeat extends PluginBase{
     
     public function unsetSitting(Player $player){
         $id = $this->getSitData($player);
-        $pk = new SetEntityLinkPacket();
+        $pk = new SetActorLinkPacket();
         $entLink = new EntityLink();
         $entLink->fromEntityUniqueId = $id;
         $entLink->toEntityUniqueId = $player->getId();
@@ -102,7 +102,7 @@ class StairSeat extends PluginBase{
         $entLink->type = EntityLink::TYPE_REMOVE;
         $pk->link = $entLink;
         $this->getServer()->broadcastPacket($this->getServer()->getOnlinePlayers(), $pk);
-        $pk = new RemoveEntityPacket();
+        $pk = new RemoveActorPacket();
         $pk->entityUniqueId = $id;
         $this->getServer()->broadcastPacket($this->getServer()->getOnlinePlayers(),$pk);
         $player->setGenericFlag(Entity::DATA_FLAG_RIDING, false);
@@ -110,13 +110,13 @@ class StairSeat extends PluginBase{
     }
     
     public function setSitting(Player $player, Vector3 $pos, int $id, ?Player $specific = null){
-        $addEntity = new AddEntityPacket();
+        $addEntity = new AddActorPacket();
         $addEntity->entityRuntimeId = $id;
         $addEntity->type = 10;
         $addEntity->position = $pos->add(0.5, 1.5, 0.5);
         $flags = (1 << Entity::DATA_FLAG_IMMOBILE | 1 << Entity::DATA_FLAG_SILENT | 1 << Entity::DATA_FLAG_INVISIBLE);
         $addEntity->metadata = [Entity::DATA_FLAGS => [Entity::DATA_TYPE_LONG, $flags]];
-        $setEntity = new SetEntityLinkPacket();
+        $setEntity = new SetActorLinkPacket();
         $entLink = new EntityLink();
         $entLink->fromEntityUniqueId = $id;
         $entLink->toEntityUniqueId = $player->getId();
