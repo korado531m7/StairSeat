@@ -13,7 +13,8 @@ class SendTask extends Task{
     
     public function onRun(int $tick) : void{
         foreach($this->data as $name => $datum){
-            if(($player = $this->instance->getServer()->getPlayer($name)) === null || $this->who === null) continue;
+            $player = $this->instance->getServer()->getPlayerExact($name);
+            if($player === null || !$this->who->isOnline()) continue;
             $this->instance->setSitting($player, $datum[1], $datum[0], $this->who);
         }
     }
