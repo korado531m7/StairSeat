@@ -112,7 +112,7 @@ class StairSeat extends PluginBase{
     public function setSitting(Player $player, Vector3 $pos, int $id, ?Player $specific = null){
         $addEntity = new AddActorPacket();
         $addEntity->entityRuntimeId = $id;
-        $addEntity->type = 10;
+        $addEntity->type = AddActorPacket::LEGACY_ID_MAP_BC[10];
         $addEntity->position = $pos->add(0.5, 1.5, 0.5);
         $flags = (1 << Entity::DATA_FLAG_IMMOBILE | 1 << Entity::DATA_FLAG_SILENT | 1 << Entity::DATA_FLAG_INVISIBLE);
         $addEntity->metadata = [Entity::DATA_FLAGS => [Entity::DATA_TYPE_LONG, $flags]];
