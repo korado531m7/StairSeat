@@ -33,6 +33,10 @@ class ToggleCommand extends PluginCommand{
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args){
+        if(!$this->testPermission($sender)){
+            return;
+        }
+
         if($sender instanceof Player){
             $sender->sendMessage($this->toggle(strtolower($sender->getName())) ? (TextFormat::GREEN . 'You will be able to sit on the stairs') : (TextFormat::RED . 'You will not be able to sit on the stairs'));
         }else{
