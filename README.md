@@ -16,8 +16,7 @@ To cancel, jump or sneak.
 
 
 ## Command
-`/sit` - Toggle to sit on the stair block. To use this command, you must set `register-sit-command` in the config.yml to `true`
-
+`/sit` - Toggle to sit on the stair block. To use this command, you must set `register-sit-command` in the config.yml to `true` (Permission: `stairseat.toggle`)
 
 ## Settings
 You can customize some settings.
@@ -53,9 +52,9 @@ To enable all worlds, set value to `true` , or if you want to enable specific wo
   * `@p` - sitting player's name
   
   
-  ### Developer Documentation
-  * If you check whether player is sitting on the stair, please call method isSitting from StairSeat class
-  ```php
-  /** @var Player $player */
-  isSitting(Player $player) : bool
-  ```
+### Developer Documentation
+ * If you check whether player is sitting on the stair, please call method isSitting from StairSeat class
+```php
+/** @var \pocketmine\Player $player */
+isSitting(Player $player) : bool
+```

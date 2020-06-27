@@ -1,6 +1,10 @@
 name: StairSeat
 api: 3.14.0
 main: korado531m7\StairSeat\StairSeat
-version: 1.5.0
+version: 1.5.1
 author: korado531m7
 description: Enable to sit on the stair block
+permissions:
+  stairseat.toggle:
+    description: "Toggle to sit"
+    default: true
