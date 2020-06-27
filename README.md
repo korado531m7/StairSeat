@@ -3,39 +3,59 @@
 
 # StairSeat
 **Sit on the stair block**
-**Supported all stair blocks**
 
 
-### Feature
+## Feature
 You can sit on the stair block
 
 
-### How to use
+## How to use
 Install this plugin and run your server.
 place stair block and tap (or click) it.
 To cancel, jump or sneak.
 
 
-### Settings
-Open config.yml in plugin folder.
-`send-tip-when-sit`       - Tap jump to exit the seat
-
-Replacement:
-`@b` - Block, its name, where player try to seat
-
-Example: You sit on @b Block!
+## Command
+`/sit` - Toggle to sit on the stair block. To use this command, you must set `register-sit-command` in the config.yml to `true`
 
 
-`tryto-sit-already-inuse` - Send message when trying to seat on stair which is already used
+## Settings
+You can customize some settings.
+To edit, open config.yml in plugin folder.
 
-Replacement:
-`@b` - Block, its name, where player try to seat
+### General
+* `apply-worlds` - Enable to use stairs as seat for each worlds or all worlds.
+To enable all worlds, set value to `true` , or if you want to enable specific worlds, type the worlds' name.
+(To set multiple worlds, separate with comma like `world1, world2`)
 
-`@p` - Sitting player's name
+* `allow-seat-high-height` - Allow player to sit on seat if its height is higher than player
 
-Example: You are trying to seat @b but it is used by @p
+* `allow-seat-upsidedown` - Allow player to sit on upside-down stairs
+
+* `allow-seat-while-sneaking` - Allow to sit when player is sneaking
+
+* `stand-up-when-break-block` - Player who sit on their stairs will stand up when break
+
+* `disable-damage-when-sit` - While player is sitting on the stair, will not be damaged from all causes
+
+* `register-sit-command` - Register /sit command
 
 
-`disable-block-ids`        - Disable stair blocks
+* `send-tip-when-sit` - This massage will be sent when player sit
+  * `@b` - block's name
+  * `@x` - x coordinates
+  * `@y` - y coordinates
+  * `@z` - z coordinates
 
-Example: to disable oak stair and stone stair, write '53, 109'
+
+* `try-to-sit-already-inuse` - Send message when trying to seat on stair which is already used
+  * `@b` - block's name
+  * `@p` - sitting player's name
+  
+  
+  ### Developer Documentation
+  * If you check whether player is sitting on the stair, please call method isSitting from StairSeat class
+  ```php
+  /** @var Player $player */
+  isSitting(Player $player) : bool
+  ```

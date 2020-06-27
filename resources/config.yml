@@ -1,34 +1,76 @@
 # StairSeat Configuration File
+# Author: korado531m7
 
 # ------------------------------ Apply Settings ------------------------------
 
-# Enter world name for applying
-# if you want multiple worlds, separate with comma   (e.g. test1, test2)
-# (if set to true, all of worlds will be applied seat feature)
+# Apply for all worlds
+# If you set to false, you must write the folder name of world for applying in apply-world-names
+apply-all-worlds: true
 
-apply-world: true
+# Enter folder name of world for applying (If apply-all-worlds is true, you don't have to write this)
+# if you want multiple worlds, separate with comma (e.g. test1, test2)
+apply-world-names: write, world, name, here
 
 # ----------------------------------------------------------------------------
 
 # Allow player to sit on seat if its height is higher than player
+# Value: true | false
 
-allow-seat-high-height: false
-
-# ----------------------------------------------------------------------------
-
-# Player can sit on stair if under the block's id is this id.
-# (if set to true, all of blocks are allowed)
-# (Example: if set to 5 (oak wood block), player can sit on stair if under the stair's block is oak wood)
-
-allow-block-under-id: true
+allow-seat-high-height: true
 
 # ----------------------------------------------------------------------------
 
-# Disable block id (if set to false, none of stairs are disabled)
-# To disable some blocks, separate with comma
-# (ex. to disable oak stair and stone stair, write '53, 109')
+# Allow player to sit on upside-down stairs
+# Value: true | false
 
-disable-block-ids: false
+allow-seat-upsidedown: false
+
+# ----------------------------------------------------------------------------
+
+# Allow player to sit on stairs while sneaking
+# Value: true | false
+
+allow-seat-while-sneaking: true
+
+# ----------------------------------------------------------------------------
+
+# Player who sit on their stairs will stand up when break
+# Value: true | false
+
+stand-up-when-break-block: true
+
+# ----------------------------------------------------------------------------
+
+# Player who sit on their stairs will not be damaged from all causes
+# Value: true | false
+
+disable-damage-when-sit: false
+
+# ----------------------------------------------------------------------------
+
+# If set to true, player can sit on the stairs where on the block must be an air
+# Value: true | false
+
+enable-check-up-block: false
+
+# ----------------------------------------------------------------------------
+
+# Enabled stairs list
+# To disable specific stair from seat, please change the value to false
+enable-stair-acasia: true
+enable-stair-birch: true
+enable-stair-brick: true
+enable-stair-cobblestone: true
+enable-stair-dark_oak: true
+enable-stair-nether_brick: true
+enable-stair-oak: true
+enable-stair-purpur: true
+enable-stair-quartz: true
+enable-stair-red_sandstone: true
+enable-stair-sandstone: true
+enable-stair-spruce: true
+enable-stair-stone: true
+enable-stair-stone_brick: true
 
 # ----------------------------------------------------------------------------
 
@@ -38,17 +80,29 @@ disable-block-ids: false
 
 # ---------------------------- General Settings -------------------------------
 
+# Add 'sit' Command
+register-sit-command: true
+
+# -----------------------------------------------------------------------------
+
 # Send tip when sit down
-# Replacement : @b = block where player try to seat name
+# Replacement : @b = block's name
+#               @x = block's x coordinates
+#               @y = block's y coordinates
+#               @z = block's z coordinates
 
 send-tip-when-sit: Tap jump to exit the seat
 
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # Send message when trying to seat on stair which is already used
-# Replacement : @b = try to seat block's name
-#               @b = try to seat block's name
+# Replacement : @b = block's name
+#               @p = player's name
 
-tryto-sit-already-inuse: This seat is used by @p
+try-to-sit-already-inuse: This seat is used by @p
 
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+
+
+# Please don't rewrite
+config-version: 1
