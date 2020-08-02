@@ -19,6 +19,7 @@
 namespace korado531m7\StairSeat;
 
 use pocketmine\block\Air;
+use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\level\Position;
 use pocketmine\Player;
 use pocketmine\block\Block;
@@ -28,7 +29,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
 class StairSeat extends PluginBase{
-    const CONFIG_VERSION = 1;
+    const CONFIG_VERSION = 2;
 
     /** @var SeatData[] */
     private $seatData = [];
@@ -98,6 +99,18 @@ class StairSeat extends PluginBase{
 
     public function isEnabledCheckOnBlock() : bool{
         return (bool) $this->getConfig()->get('enable-check-up-block', false);
+    }
+
+    public function isAllowedOnlyRightClick() : bool{
+        return (bool) $this->getConfig()->get('allow-only-right-click', false);
+    }
+
+    public function checkClick(PlayerInteractEvent $event) : bool{
+        return $this->isAllowedOnlyRightClick() ? ($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK) : ($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK || $event->getAction() === PlayerInteractEvent::LEFT_CLICK_BLOCK);
+    }
+
+    public function getToggleCommandLabel() : string{
+        return (string) $this->getConfig()->get('toggle-command-label', 'sit');
     }
 
     public function canSit(Player $player, Block $block) : bool{

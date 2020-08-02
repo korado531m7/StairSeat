@@ -55,6 +55,13 @@ enable-check-up-block: false
 
 # ----------------------------------------------------------------------------
 
+# If set to true, allow players to sit by only right click
+# Value: true | false
+
+allow-only-right-click: false
+
+# ----------------------------------------------------------------------------
+
 # Enabled stairs list
 # To disable specific stair from seat, please change the value to false
 enable-stair-acasia: true
@@ -72,18 +79,28 @@ enable-stair-spruce: true
 enable-stair-stone: true
 enable-stair-stone_brick: true
 
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
+
+
+
+# ---------------------------- Command Settings -------------------------------
+
+# Add Toggle Command
+register-toggle-command: true
+
+# -----------------------------------------------------------------------------
+
+# Toggle Command Label
+# Command label will be set to this value (default: /sit)
+toggle-command-label: sit
+
+# -----------------------------------------------------------------------------
 
 
 
 
 # ---------------------------- General Settings -------------------------------
-
-# Add 'sit' Command
-register-sit-command: true
-
-# -----------------------------------------------------------------------------
 
 # Send tip when sit down
 # Replacement : @b = block's name
@@ -105,4 +122,4 @@ try-to-sit-already-inuse: This seat is used by @p
 
 
 # Please don't rewrite
-config-version: 1
+config-version: 2

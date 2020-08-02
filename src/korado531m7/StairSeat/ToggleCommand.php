@@ -27,7 +27,8 @@ use pocketmine\utils\TextFormat;
 
 class ToggleCommand extends PluginCommand{
     public function __construct(Plugin $owner){
-        parent::__construct('sit', $owner);
+        /** @var StairSeat $owner */
+        parent::__construct($owner->getToggleCommandLabel(), $owner);
         $this->setPermission('stairseat.toggle');
         $this->setDescription('Toggle to sit on the stairs');
     }

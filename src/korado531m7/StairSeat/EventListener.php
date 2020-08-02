@@ -23,6 +23,7 @@ use pocketmine\event\Listener;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\network\mcpe\protocol\InteractPacket;
@@ -46,7 +47,7 @@ class EventListener implements Listener{
     public function onInteract(PlayerInteractEvent $event){
         $player = $event->getPlayer();
         $block = $event->getBlock();
-        if($this->instance->canSit($player, $block)){
+        if($this->instance->canSit($player, $block) && $this->instance->checkClick($event)){
             $targetSeat = $this->instance->getSeatDataByPosition($block);
             if($targetSeat instanceof SeatData){
                 $player->sendMessage(str_replace(['@p','@b'], [$targetSeat->getPlayer()->getName(), $block->getName()], $this->instance->getConfig()->get('try-to-sit-already-inuse', 'This seat is used by @p')));
@@ -67,6 +68,13 @@ class EventListener implements Listener{
                     $seatDatum->seat([$target]);
                 }
             }), 30);
+        }
+    }
+
+    public function onMove(PlayerMoveEvent $event) : void{
+        $seatData = $this->instance->getSeatDataByPlayer($event->getPlayer());
+        if($seatData instanceof SeatData){
+            $seatData->optimizeRotation();
         }
     }
 

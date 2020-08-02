@@ -22,7 +22,9 @@ namespace korado531m7\StairSeat;
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
 use pocketmine\level\Position;
+use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\AddActorPacket;
+use pocketmine\network\mcpe\protocol\MoveActorAbsolutePacket;
 use pocketmine\network\mcpe\protocol\RemoveActorPacket;
 use pocketmine\network\mcpe\protocol\SetActorLinkPacket;
 use pocketmine\network\mcpe\protocol\types\EntityLink;
@@ -33,6 +35,8 @@ class SeatData{
     private $player;
     /** @var Block */
     private $block;
+    /** @var Vector3 */
+    private $position;
     /** @var int */
     private $eid;
 
@@ -40,6 +44,7 @@ class SeatData{
         $this->eid = Entity::$entityCount++;
         $this->player = $player;
         $this->block = $block;
+        $this->position = $block->add(0.5, 1.5, 0.5);
     }
 
     /**
@@ -82,7 +87,7 @@ class SeatData{
         $addEntity = new AddActorPacket();
         $addEntity->entityRuntimeId = $this->eid;
         $addEntity->type = AddActorPacket::LEGACY_ID_MAP_BC[Entity::CHICKEN];
-        $addEntity->position = $this->block->add(0.5, 1.5, 0.5);
+        $addEntity->position = $this->position;
         $flags = (1 << Entity::DATA_FLAG_IMMOBILE | 1 << Entity::DATA_FLAG_SILENT | 1 << Entity::DATA_FLAG_INVISIBLE);
         $addEntity->metadata = [Entity::DATA_FLAGS => [Entity::DATA_TYPE_LONG, $flags]];
         $setEntity = new SetActorLinkPacket();
@@ -90,5 +95,15 @@ class SeatData{
         $this->player->setGenericFlag(Entity::DATA_FLAG_RIDING, true);
         $this->player->getServer()->broadcastPacket($target, $addEntity);
         $this->player->getServer()->broadcastPacket($target, $setEntity);
+    }
+
+    public function optimizeRotation() : void{
+        $pk = new MoveActorAbsolutePacket();
+        $pk->position = $this->position;
+        $pk->entityRuntimeId = $this->eid;
+        $pk->xRot = $this->player->getPitch();
+        $pk->yRot = $this->player->getYaw();
+        $pk->zRot = $this->player->getYaw();
+        $this->player->getServer()->broadcastPacket($this->player->getServer()->getOnlinePlayers(), $pk);
     }
 }

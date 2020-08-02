@@ -37,8 +37,11 @@ To enable all worlds, set value to `true` , or if you want to enable specific wo
 
 * `disable-damage-when-sit` - While player is sitting on the stair, will not be damaged from all causes
 
-* `register-sit-command` - Register /sit command
+* `register-toggle-command` - Register toggle command
 
+* `toggle-command-label` - Command label will be set to this value (default: /sit)
+
+* `allow-only-right-click` - Allow players to sit by only right click
 
 * `send-tip-when-sit` - This massage will be sent when player sit
   * `@b` - block's name
