@@ -29,7 +29,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
 class StairSeat extends PluginBase{
-    const CONFIG_VERSION = 2;
+    const CONFIG_VERSION = 3;
 
     /** @var SeatData[] */
     private $seatData = [];
@@ -60,6 +60,7 @@ class StairSeat extends PluginBase{
                 ($id === Block::BRICK_STAIRS && $conf->get('enable-stair-brick', true)) ||
                 ($id === Block::COBBLESTONE_STAIRS && $conf->get('enable-stair-cobblestone', true)) ||
                 ($id === Block::DARK_OAK_STAIRS && $conf->get('enable-stair-dark_oak', true)) ||
+                ($id === Block::JUNGLE_STAIRS && $conf->get('enable-stair-jungle', true)) ||
                 ($id === Block::NETHER_BRICK_STAIRS && $conf->get('enable-stair-nether_brick', true)) ||
                 ($id === Block::OAK_STAIRS && $conf->get('enable-stair-oak', true)) ||
                 ($id === Block::PURPUR_STAIRS && $conf->get('enable-stair-purpur', true)) ||

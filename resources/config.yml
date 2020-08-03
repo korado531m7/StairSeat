@@ -69,6 +69,7 @@ enable-stair-birch: true
 enable-stair-brick: true
 enable-stair-cobblestone: true
 enable-stair-dark_oak: true
+enable-stair-jungle: true
 enable-stair-nether_brick: true
 enable-stair-oak: true
 enable-stair-purpur: true
@@ -122,4 +123,4 @@ try-to-sit-already-inuse: This seat is used by @p
 
 
 # Please don't rewrite
-config-version: 2
+config-version: 3
