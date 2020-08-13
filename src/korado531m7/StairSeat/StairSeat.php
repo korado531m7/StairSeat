@@ -29,7 +29,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
 class StairSeat extends PluginBase{
-    const CONFIG_VERSION = 3;
+    const CONFIG_VERSION = 4;
 
     /** @var SeatData[] */
     private $seatData = [];
@@ -87,7 +87,7 @@ class StairSeat extends PluginBase{
     }
 
     public function isToggleEnabled(Player $player) : bool{
-        return (bool) $this->toggleConfig->get(strtolower($player->getName()), true);
+        return (bool) $this->toggleConfig->get(strtolower($player->getName()));
     }
 
     public function canApplyWorld(Level $level) : bool{
@@ -106,6 +106,10 @@ class StairSeat extends PluginBase{
         return (bool) $this->getConfig()->get('allow-only-right-click', false);
     }
 
+    public function isDefaultToggleEnabled() : bool{
+        return (bool) $this->getConfig()->get('default-toggle-sit', true);
+    }
+
     public function checkClick(PlayerInteractEvent $event) : bool{
         return $this->isAllowedOnlyRightClick() ? ($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK) : ($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK || $event->getAction() === PlayerInteractEvent::LEFT_CLICK_BLOCK);
     }
@@ -116,7 +120,7 @@ class StairSeat extends PluginBase{
 
     public function canSit(Player $player, Block $block) : bool{
         return (
-            $this->isToggleEnabled($player) &&
+            ($this->isDefaultToggleEnabled() || $this->isToggleEnabled($player)) &&
             $this->canApplyWorld($block->getLevel()) &&
             $this->isEnabledStair($block) &&
             !$this->isSitting($player) &&

@@ -13,6 +13,14 @@ apply-world-names: write, world, name, here
 
 # ----------------------------------------------------------------------------
 
+# Default toggle
+# If this value is true, player can sit on the stairs, but its not, they must toggle by sit command to sit
+# Value: true | false
+
+default-toggle-sit: true
+
+# ----------------------------------------------------------------------------
+
 # Allow player to sit on seat if its height is higher than player
 # Value: true | false
 
@@ -123,4 +131,4 @@ try-to-sit-already-inuse: This seat is used by @p
 
 
 # Please don't rewrite
-config-version: 3
+config-version: 4
