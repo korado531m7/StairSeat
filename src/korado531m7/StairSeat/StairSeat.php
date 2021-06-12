@@ -53,7 +53,7 @@ class StairSeat extends PluginBase{
         $id = $block->getId();
         return (
             $block instanceof Stair &&
-            ($conf->get('allow-seat-upsidedown') ? true : $block->getDamage() <= 3) &&
+            ($conf->get('allow-seat-upsidedown') ? true : (($block->getDamage() & 0x04) === 0)) &&
             (
                 ($id === Block::ACACIA_STAIRS && $conf->get('enable-stair-acasia', true)) ||
                 ($id === Block::BIRCH_STAIRS && $conf->get('enable-stair-birch', true)) ||
